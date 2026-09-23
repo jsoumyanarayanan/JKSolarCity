@@ -182,55 +182,13 @@
     z-index:4;
   }
   .cursor-rays{
-    position:absolute; width:800px; height:800px;
-    border-radius:50%;
-    background:conic-gradient(from 0deg at 50% 50%, 
-      transparent 0deg, 
-      rgba(255,206,122,0.4) 8deg, 
-      transparent 16deg,
-      transparent 32deg,
-      rgba(255,206,122,0.4) 40deg,
-      transparent 48deg,
-      transparent 64deg,
-      rgba(255,206,122,0.4) 72deg,
-      transparent 80deg,
-      transparent 96deg,
-      rgba(255,206,122,0.4) 104deg,
-      transparent 112deg,
-      transparent 128deg,
-      rgba(255,206,122,0.4) 136deg,
-      transparent 144deg,
-      transparent 160deg,
-      rgba(255,206,122,0.4) 168deg,
-      transparent 176deg,
-      transparent 192deg,
-      rgba(255,206,122,0.4) 200deg,
-      transparent 208deg,
-      transparent 224deg,
-      rgba(255,206,122,0.4) 232deg,
-      transparent 240deg,
-      transparent 256deg,
-      rgba(255,206,122,0.4) 264deg,
-      transparent 272deg,
-      transparent 288deg,
-      rgba(255,206,122,0.4) 296deg,
-      transparent 304deg,
-      transparent 320deg,
-      rgba(255,206,122,0.4) 328deg,
-      transparent 336deg,
-      transparent 352deg,
-      transparent 360deg
-    );
-    transform:translate(-50%, -50%);
-    animation:rayRotate 6s linear infinite;
+    position:absolute; width:0; height:0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-bottom: 500px solid rgba(255,206,122,0.4);
+    filter:blur(25px);
+    transform-origin: top center;
     pointer-events:none;
-    filter:blur(2px);
-    box-shadow:0 0 100px rgba(255,206,122,0.5);
-    mix-blend-mode:screen;
-  }
-  @keyframes rayRotate{
-    from{transform:translate(-50%, -50%) rotate(0deg);}
-    to{transform:translate(-50%, -50%) rotate(360deg);}
   }
   .cursor-glow{
     position:absolute; width:300px; height:300px;
@@ -1201,8 +1159,9 @@
     <div class="hero-photo"></div>
     <div class="hero-glow"></div>
     <div class="hero-sun-rays" id="heroSunRays" aria-hidden="true">
-      <div class="cursor-rays" id="cursorRays" style="position: absolute; left: 50%; top: 50%; opacity: 1; transition: opacity 0.3s, left 0.05s, top 0.05s; pointer-events: none;"></div>
-      <div class="cursor-glow" id="cursorGlow" style="position: absolute; left: 50%; top: 50%; opacity: 1; transition: opacity 0.3s, left 0.05s, top 0.05s; pointer-events: none;"></div>
+      <div class="cursor-rays" id="cursorRaysLeft" style="position: absolute; left: 0%; top: 0%; opacity: 0; transition: opacity 0.4s ease, left 0.6s cubic-bezier(0.4, 0, 0.2, 1), top 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none;"></div>
+      <div class="cursor-rays" id="cursorRaysRight" style="position: absolute; right: 0%; top: 0%; opacity: 0; transition: opacity 0.4s ease, right 0.6s cubic-bezier(0.4, 0, 0.2, 1), top 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none;"></div>
+      <div class="cursor-glow" id="cursorGlow" style="position: absolute; left: 50%; top: 50%; opacity: 0; transition: opacity 0.4s ease, left 0.6s cubic-bezier(0.4, 0, 0.2, 1), top 0.6s cubic-bezier(0.4, 0, 0.2, 1); pointer-events: none;"></div>
     </div>
     <div class="hero-particles" id="heroParticles" aria-hidden="true"></div>
     <div class="hero-scrim"></div>
@@ -1854,35 +1813,48 @@
 
   // cursor-following sun rays effect
   var heroSection = document.querySelector('.hero');
-  var cursorRays = document.getElementById('cursorRays');
+  var cursorRaysLeft = document.getElementById('cursorRaysLeft');
+  var cursorRaysRight = document.getElementById('cursorRaysRight');
   var cursorGlow = document.getElementById('cursorGlow');
-  console.log('Cursor effect elements:', heroSection, cursorRays, cursorGlow);
+  console.log('Cursor effect elements:', heroSection, cursorRaysLeft, cursorRaysRight, cursorGlow);
   console.log('Reduce motion:', reduceMotion);
   
-  if(heroSection && cursorRays && cursorGlow){
+  if(heroSection && cursorRaysLeft && cursorRaysRight && cursorGlow){
     console.log('Setting up cursor effects...');
-    // Initial positioning - start visible for testing
-    cursorRays.style.position = 'absolute';
-    cursorRays.style.left = '50%';
-    cursorRays.style.top = '50%';
-    cursorRays.style.opacity = '1';
-    cursorRays.style.transition = 'opacity 0.3s ease, left 0.05s ease, top 0.05s ease';
-    cursorRays.style.pointerEvents = 'none';
     
+    // Initial positioning - start from top corners
+    cursorRaysLeft.style.position = 'absolute';
+    cursorRaysLeft.style.left = '0%';
+    cursorRaysLeft.style.top = '0%';
+    cursorRaysLeft.style.opacity = '0';
+    cursorRaysLeft.style.transition = 'opacity 0.4s ease, left 0.6s cubic-bezier(0.4, 0, 0.2, 1), top 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+    cursorRaysLeft.style.pointerEvents = 'none';
+    cursorRaysLeft.style.transform = 'rotate(45deg)';
+    
+    cursorRaysRight.style.position = 'absolute';
+    cursorRaysRight.style.right = '0%';
+    cursorRaysRight.style.top = '0%';
+    cursorRaysRight.style.opacity = '0';
+    cursorRaysRight.style.transition = 'opacity 0.4s ease, right 0.6s cubic-bezier(0.4, 0, 0.2, 1), top 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+    cursorRaysRight.style.pointerEvents = 'none';
+    cursorRaysRight.style.transform = 'rotate(-45deg)';
+
     cursorGlow.style.position = 'absolute';
     cursorGlow.style.left = '50%';
     cursorGlow.style.top = '50%';
-    cursorGlow.style.opacity = '1';
-    cursorGlow.style.transition = 'opacity 0.3s ease, left 0.05s ease, top 0.05s ease';
+    cursorGlow.style.opacity = '0';
+    cursorGlow.style.transition = 'opacity 0.4s ease, left 0.6s cubic-bezier(0.4, 0, 0.2, 1), top 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
     cursorGlow.style.pointerEvents = 'none';
 
     var showCursorEffects = function(){
-      cursorRays.style.opacity = '1';
+      cursorRaysLeft.style.opacity = '1';
+      cursorRaysRight.style.opacity = '1';
       cursorGlow.style.opacity = '1';
     };
 
     var hideCursorEffects = function(){
-      cursorRays.style.opacity = '0';
+      cursorRaysLeft.style.opacity = '0';
+      cursorRaysRight.style.opacity = '0';
       cursorGlow.style.opacity = '0';
     };
 
@@ -1891,8 +1863,21 @@
       var x = e.clientX - rect.left;
       var y = e.clientY - rect.top;
       
-      cursorRays.style.left = x + 'px';
-      cursorRays.style.top = y + 'px';
+      // Calculate angle from left top corner to cursor
+      var angleLeft = Math.atan2(y - 0, x - 0) * (180 / Math.PI) + 90;
+      
+      // Calculate angle from right top corner to cursor
+      var angleRight = Math.atan2(y - 0, x - rect.width) * (180 / Math.PI) + 90;
+      
+      // Keep rays at their corners, only rotate to point toward cursor
+      cursorRaysLeft.style.left = '0px';
+      cursorRaysLeft.style.top = '0px';
+      cursorRaysLeft.style.transform = 'rotate(' + angleLeft + 'deg)';
+      
+      cursorRaysRight.style.right = '0px';
+      cursorRaysRight.style.top = '0px';
+      cursorRaysRight.style.transform = 'rotate(' + angleRight + 'deg)';
+      
       cursorGlow.style.left = x + 'px';
       cursorGlow.style.top = y + 'px';
     };
