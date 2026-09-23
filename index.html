@@ -446,6 +446,7 @@
     box-shadow:0 22px 48px -18px rgba(14,27,61,0.45);
     display:none;
     position:relative;
+    align-self:start;
   }
   .approach-photo-left img{
     width:100%; height:auto; object-fit:contain;
@@ -455,7 +456,7 @@
   .approach-photo-left figcaption{
     position:absolute; left:0; right:0; bottom:0;
     background:linear-gradient(to top, rgba(14,27,61,0.92), transparent);
-    color:#fff; font-size:12.5px; padding:34px 16px 12px; font-weight:500;
+    color:#fff; font-size:12.5px; padding:18px 16px 12px; font-weight:500;
   }
   .approach-photo{
     position:relative; border-radius:14px; overflow:hidden;
@@ -1780,9 +1781,6 @@
   if(heroPhoto && heroSection) parallaxLayers.push({el:heroPhoto, section:heroSection, rate:0.15});
   if(heroGlow && heroSection) parallaxLayers.push({el:heroGlow, section:heroSection, rate:0.25});
   if(finalPhoto && finalSection) parallaxLayers.push({el:finalPhoto, section:finalSection, rate:0.18});
-  var approachPhotoLeft = document.querySelector('.approach-photo-left img');
-  var approachFig = document.querySelector('.approach-photo-left');
-  if(approachPhotoLeft && approachFig) parallaxLayers.push({el:approachPhotoLeft, section:approachFig, rate:0.12});
 
   function onScrollEffects(){
     var docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -1960,10 +1958,9 @@
       var naturalHeight = this.naturalHeight;
       var maxWidth = 500;
       var calculatedWidth = Math.min(naturalWidth, maxWidth);
-      var calculatedHeight = (naturalHeight / naturalWidth) * calculatedWidth;
       
       approachPhotoHeaderContainer.style.width = calculatedWidth + 'px';
-      approachPhotoHeaderContainer.style.height = calculatedHeight + 'px';
+      approachPhotoHeaderContainer.style.height = 'auto';
       approachPhotoHeaderContainer.style.display = 'block';
     };
     if(approachPhotoHeader.complete) approachPhotoHeader.onload();
@@ -1975,10 +1972,9 @@
       var naturalHeight = this.naturalHeight;
       var availableWidth = 400;
       var calculatedWidth = Math.min(naturalWidth, availableWidth);
-      var calculatedHeight = (naturalHeight / naturalWidth) * calculatedWidth;
       
       approachPhotoLeftContainer.style.width = calculatedWidth + 'px';
-      approachPhotoLeftContainer.style.height = calculatedHeight + 'px';
+      approachPhotoLeftContainer.style.height = 'auto';
       approachPhotoLeftContainer.style.display = 'block';
     };
     if(approachPhotoLeft.complete) approachPhotoLeft.onload();
