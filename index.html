@@ -342,6 +342,9 @@
     color:var(--gold-2); font-weight:700; white-space:nowrap;
   }
   .hero-stat span{font-size:11px; color:#fff; font-weight:500;}
+  .hero-stat-sub{
+    display:block; font-size:9px; color:var(--on-navy-soft); font-weight:400; margin-top:2px;
+  }
   @media (max-width:700px){
     .hero-stats{grid-template-columns:1fr;}
     .hero-stat{border-right:none; border-bottom:1px solid rgba(255,255,255,0.14); padding:12px 20px;}
@@ -406,11 +409,54 @@
   .section-navy p.section-lead{color:var(--on-navy-soft);}
 
   /* ---------- APPROACH ---------- */
-  .approach-grid{
-    display:grid; grid-template-columns:1.05fr 0.95fr; gap:56px; align-items:center; margin-top:44px;
+  .approach-header{
+    display:flex; align-items:center; gap:32px; margin-bottom:20px;
+  }
+  .approach-header-content{
+    flex:1;
+  }
+  .approach-header-content .headline{
+    font-size:clamp(28px,4vw,42px); max-width:40ch; margin-bottom:16px;
+  }
+  .approach-header-content .section-lead{
+    font-size:16.5px; color:var(--ink-soft); max-width:56ch;
+  }
+  .approach-photo-header{
+    border-radius:12px; overflow:hidden;
+    box-shadow:0 16px 40px -15px rgba(14,27,61,0.35);
+    flex-shrink:0;
+    display:none;
     position:relative;
   }
-  @media (max-width:880px){ .approach-grid{grid-template-columns:1fr; gap:32px;} }
+  .approach-photo-header img{
+    width:100%; height:auto; object-fit:contain;
+    display:block;
+  }
+  .approach-grid{
+    display:grid; grid-template-columns:auto 1fr; gap:40px; align-items:start; margin-top:44px;
+    position:relative;
+  }
+  @media (max-width:880px){ 
+    .approach-header{flex-direction:column; align-items:flex-start;}
+    .approach-photo-header{width:100%; max-width:500px;}
+    .approach-grid{grid-template-columns:1fr; gap:32px;} 
+  }
+  .approach-photo-left{
+    border-radius:14px; overflow:hidden;
+    box-shadow:0 22px 48px -18px rgba(14,27,61,0.45);
+    display:none;
+    position:relative;
+  }
+  .approach-photo-left img{
+    width:100%; height:auto; object-fit:contain;
+    display:block;
+  }
+  .approach-photo-header figcaption,
+  .approach-photo-left figcaption{
+    position:absolute; left:0; right:0; bottom:0;
+    background:linear-gradient(to top, rgba(14,27,61,0.92), transparent);
+    color:#fff; font-size:12.5px; padding:34px 16px 12px; font-weight:500;
+  }
   .approach-photo{
     position:relative; border-radius:14px; overflow:hidden;
     box-shadow:0 22px 48px -18px rgba(14,27,61,0.45);
@@ -605,6 +651,8 @@
   #potential .headline, #potential .section-lead{color:#fff;}
   #potential .headline{text-shadow:0 2px 12px rgba(0,0,0,0.4);}
   #potential .section-lead{color:var(--on-navy-soft);}
+
+
 
   .calc{
     background:linear-gradient(135deg, #1B2E63 0%, #132555 100%); padding:36px 34px; color:#fff;
@@ -976,7 +1024,7 @@
   .bill-input-row{transition:filter .15s ease;}
   .bill-input-row.dragging input[type=range]{filter:drop-shadow(0 0 12px rgba(240,169,60,0.8));}
 
-  #process, #potential{position:relative;}
+  #process{position:relative;}
   .aurora{
     position:absolute; z-index:-1; border-radius:50%; filter:blur(60px);
     pointer-events:none; will-change:transform;
@@ -1175,7 +1223,7 @@
         </div>
         <div class="hero-stats">
           <div class="hero-stat"><b>92 to 95%</b><span>Reduction possible on your EB bill</span></div>
-          <div class="hero-stat"><b>₹78,000</b><span>Government subsidy, up to</span></div>
+          <div class="hero-stat"><b>₹1,00,000</b><span>Government subsidy, up to</span><span class="hero-stat-sub">₹78,000 central + ₹22,000 state</span></div>
           <div class="hero-stat"><b>5 years</b><span>Annual maintenance contract included</span></div>
         </div>
       </div>
@@ -1210,10 +1258,22 @@
   <section id="approach" style="background:linear-gradient(135deg, var(--cream) 0%, #F0E6D6 100%); box-shadow:0 10px 40px -20px rgba(0,0,0,0.1);">
     <div class="wrap">
       <div class="kicker reveal is-visible">🎯 Our approach</div>
-      <h2 class="headline reveal is-visible">Every roof is different. So is every electricity bill.</h2>
-      <p class="section-lead reveal is-visible">Orientation, shade, roof material, sanctioned load, and how the building is actually used through the day all change what a good solar system looks like. We don't sell a fixed panel count - we start on-site, measure how your property runs, and design around that.</p>
+      <div class="approach-header reveal is-visible">
+        <div class="approach-header-content">
+          <h2 class="headline">Every roof is different. So is every electricity bill.</h2>
+          <p class="section-lead">Orientation, shade, roof material, sanctioned load, and how the building is actually used through the day all change what a good solar system looks like. We don't sell a fixed panel count - we start on-site, measure how your property runs, and design around that.</p>
+        </div>
+        <figure class="approach-photo-header">
+          <img src="Our_Approach_1.jpg" alt="Installation supervised on-site by the JK Solar City team">
+          <figcaption>Installation supervised on-site by the JK Solar City team</figcaption>
+        </figure>
+      </div>
 
       <div class="approach-grid reveal-stagger is-visible">
+        <figure class="approach-photo-left">
+          <img src="Our_Approach_2.png" alt="Our approach methodology">
+          <figcaption>Custom solar design for your property's unique needs</figcaption>
+        </figure>
         <div>
           <ul class="approach-list">
             <li>
@@ -1234,10 +1294,6 @@
             </li>
           </ul>
         </div>
-        <figure class="approach-photo">
-          <img src="Our_Approach_1.jpg" alt="Installation supervised on-site by the JK Solar City team">
-          <figcaption>Installation supervised on-site by the JK Solar City team</figcaption>
-        </figure>
       </div>
     </div>
   </section>
@@ -1406,7 +1462,7 @@
             <div class="calc-result-row"><span class="lbl">Potential new monthly bill</span><span class="val" id="resNewBill">₹240/mo</span></div>
             <div class="calc-result-row"><span class="lbl">Estimated monthly savings</span><span class="val gold" id="resSavings">₹2,760/mo</span></div>
             <div class="calc-result-row"><span class="lbl">Estimated yearly savings</span><span class="val gold" id="resYearly">₹33,120/yr</span></div>
-            <div class="calc-result-row"><span class="lbl">Government subsidy</span><span class="val gold" id="resSubsidy">Up to ₹78,000</span></div>
+            <div class="calc-result-row"><span class="lbl">Government subsidy</span><span class="val gold" id="resSubsidy">Up to ₹1,00,000</span></div>
             <div class="calc-result-row"><span class="lbl">CO₂ avoided every year</span><span class="val" id="resCO2">~4.0 tonnes</span></div>
             <div class="calc-result-row"><span class="lbl">Roughly like planting</span><span class="val gold" id="resTrees">201 trees</span></div>
             <div class="calc-result-row" id="resRoofRow" style="display:none;"><span class="lbl">Roof-space check</span><span class="val" id="resRoof">fits comfortably</span></div>
@@ -1468,7 +1524,7 @@
         </details>
         <details class="faq-item">
           <summary>How does the government subsidy actually work?</summary>
-          <div class="faq-a">Residential rooftop solar can qualify for a central government subsidy, up to ₹78,000 depending on system size, under current schemes. We help you with the paperwork and application as part of the process, so you're not chasing it alone.</div>
+          <div class="faq-a">Residential rooftop solar can qualify for a total government subsidy of up to ₹1,00,000, including ₹78,000 from the central government and ₹22,000 from the state government, depending on system size and location. We help you with the paperwork and application as part of the process, so you're not chasing it alone.</div>
         </details>
         <details class="faq-item">
           <summary>What happens after installation - is there any maintenance?</summary>
@@ -1695,7 +1751,7 @@
         }
         requestAnimationFrame(step);
       }
-      animateCount(statEls[1], 78000, {prefix:'₹'});
+      animateCount(statEls[1], 100000, {prefix:'₹'});
       animateCount(statEls[2], 5, {suffix:' years'});
     }
     if('IntersectionObserver' in window){
@@ -1724,7 +1780,9 @@
   if(heroPhoto && heroSection) parallaxLayers.push({el:heroPhoto, section:heroSection, rate:0.15});
   if(heroGlow && heroSection) parallaxLayers.push({el:heroGlow, section:heroSection, rate:0.25});
   if(finalPhoto && finalSection) parallaxLayers.push({el:finalPhoto, section:finalSection, rate:0.18});
-  if(approachImg && approachFig) parallaxLayers.push({el:approachImg, section:approachFig, rate:0.12});
+  var approachPhotoLeft = document.querySelector('.approach-photo-left img');
+  var approachFig = document.querySelector('.approach-photo-left');
+  if(approachPhotoLeft && approachFig) parallaxLayers.push({el:approachPhotoLeft, section:approachFig, rate:0.12});
 
   function onScrollEffects(){
     var docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -1890,6 +1948,42 @@
     console.log('Cursor effects not set up - missing elements');
   }
 
+  // dynamically size approach images based on their natural dimensions
+  var approachPhotoHeader = document.querySelector('.approach-photo-header img');
+  var approachPhotoHeaderContainer = document.querySelector('.approach-photo-header');
+  var approachPhotoLeft = document.querySelector('.approach-photo-left img');
+  var approachPhotoLeftContainer = document.querySelector('.approach-photo-left');
+  
+  if(approachPhotoHeader && approachPhotoHeaderContainer){
+    approachPhotoHeader.onload = function(){
+      var naturalWidth = this.naturalWidth;
+      var naturalHeight = this.naturalHeight;
+      var maxWidth = 500;
+      var calculatedWidth = Math.min(naturalWidth, maxWidth);
+      var calculatedHeight = (naturalHeight / naturalWidth) * calculatedWidth;
+      
+      approachPhotoHeaderContainer.style.width = calculatedWidth + 'px';
+      approachPhotoHeaderContainer.style.height = calculatedHeight + 'px';
+      approachPhotoHeaderContainer.style.display = 'block';
+    };
+    if(approachPhotoHeader.complete) approachPhotoHeader.onload();
+  }
+  
+  if(approachPhotoLeft && approachPhotoLeftContainer){
+    approachPhotoLeft.onload = function(){
+      var naturalWidth = this.naturalWidth;
+      var naturalHeight = this.naturalHeight;
+      var availableWidth = 400;
+      var calculatedWidth = Math.min(naturalWidth, availableWidth);
+      var calculatedHeight = (naturalHeight / naturalWidth) * calculatedWidth;
+      
+      approachPhotoLeftContainer.style.width = calculatedWidth + 'px';
+      approachPhotoLeftContainer.style.height = calculatedHeight + 'px';
+      approachPhotoLeftContainer.style.display = 'block';
+    };
+    if(approachPhotoLeft.complete) approachPhotoLeft.onload();
+  }
+
   // button ripple micro-animation
   document.querySelectorAll('.btn').forEach(function(btn){
     btn.addEventListener('click', function(e){
@@ -1980,7 +2074,7 @@
   }
 
   function subsidyFor(type){
-    if(type === 'home') return 'Up to ₹78,000';
+    if(type === 'home') return 'Up to ₹1,00,000';
     return 'Ask us - schemes vary';
   }
 
