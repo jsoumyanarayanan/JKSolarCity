@@ -7,12 +7,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" as="style">
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=block" rel="stylesheet">
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script type="text/javascript">
-  (function(){
-    emailjs.init("dMvPfT2aES6npqXV9");
-  })();
-</script>
 <style>
   :root{
     --navy:#0E1B3D;
@@ -1592,7 +1586,7 @@
           </div>
         </div>
 
-<form class="callback-form" id="callbackForm">
+<form class="callback-form" id="callbackForm" onsubmit="return false;">
           <h3>Connect with solar experts</h3>
           <div class="form-row">
             <label for="cbName">Your name</label>
@@ -2057,8 +2051,6 @@
   var resSavings = document.getElementById('resSavings');
   var resYearly = document.getElementById('resYearly');
   var resSubsidy = document.getElementById('resSubsidy');
-  var resCO2 = document.getElementById('resCO2');
-  var resTrees = document.getElementById('resTrees');
   var resRoofRow = document.getElementById('resRoofRow');
   var resRoof = document.getElementById('resRoof');
   var resBatteryRow = document.getElementById('resBatteryRow');
@@ -2082,7 +2074,8 @@
 
   function pulseResults(){
     if(reduceMotion) return;
-    document.querySelectorAll('.calc-result-row .val').forEach(function(v){
+    var resultValues = document.querySelectorAll('.calc-result-row .val');
+    resultValues.forEach(function(v){
       v.classList.remove('pulse');
       void v.offsetWidth;
       v.classList.add('pulse');
@@ -2104,14 +2097,6 @@
     resSavings.textContent = fmt(savings) + '/mo';
     resYearly.textContent = fmt(savings * 12) + '/yr';
     resSubsidy.textContent = subsidyFor(propType);
-
-    // illustrative CO2 impact: ~1,400 kWh/kW/year in Chennai, ~0.82 kg CO2/kWh grid factor, ~20kg CO2/tree/year
-    var kw = (range[0] + range[1]) / 2;
-    var annualKwh = kw * 1400;
-    var co2Tonnes = (annualKwh * 0.82) / 1000;
-    var trees = Math.round((annualKwh * 0.82) / 20);
-    resCO2.textContent = '~' + co2Tonnes.toFixed(1) + ' tonnes';
-    resTrees.textContent = trees.toLocaleString('en-IN') + ' trees';
 
     // roof-space check: ~100 sq ft per kW, rough rule of thumb
     if(roof > 0){
@@ -2168,59 +2153,97 @@
     window.addEventListener('touchend', end);
   });
 
-  // callback form -> EmailJS
+  // callback form -> Google Apps Script
+  console.log('Setting up callback form handler...');
   var form = document.getElementById('callbackForm');
   var cbSuccess = document.getElementById('cbSuccess');
   var cbSubmitBtn = document.getElementById('cbSubmitBtn');
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    var name = document.getElementById('cbName').value.trim();
-    var phone = document.getElementById('cbPhone').value.trim();
-    var type = document.getElementById('cbType').value;
-    var msg = document.getElementById('cbMsg').value.trim();
-
-    // Get current date and time
-    var now = new Date();
-    var dateTime = now.toLocaleString('en-IN', {
-      dateStyle: 'medium',
-      timeStyle: 'short',
-      timeZone: 'Asia/Kolkata'
-    });
-
-    // Disable button and show loading state
-    cbSubmitBtn.textContent = 'Sending...';
-    cbSubmitBtn.disabled = true;
-
-    // Send email via EmailJS
-    emailjs.send("service_lrq5brf", "template_uxi9v28", {
-      name: name,
-      number: phone,
-      time: dateTime,
-      prop_type: type,
-      message: msg || '(No message provided)'
-    })
-    .then(function() {
-      // Success
-      cbSubmitBtn.textContent = 'Request sent';
-      cbSuccess.classList.remove('show');
-      void cbSuccess.offsetWidth; // restart animation if shown again
-      cbSuccess.classList.add('show');
-      form.reset();
+  console.log('Form element:', form);
+  console.log('Button element:', cbSubmitBtn);
+  console.log('Success element:', cbSuccess);
+  
+  if(form){
+    form.addEventListener('submit', function(e){
+      console.log('Form submit event fired');
+      e.preventDefault();
+      console.log('Default prevented');
       
-      // Re-enable button after 3 seconds
-      setTimeout(function(){
-        cbSubmitBtn.textContent = "We'd love to connect";
+      var name = document.getElementById('cbName').value.trim();
+      var phone = document.getElementById('cbPhone').value.trim();
+      var type = document.getElementById('cbType').value;
+      var msg = document.getElementById('cbMsg').value.trim();
+      
+      console.log('Form values - Name:', name, 'Phone:', phone, 'Type:', type, 'Msg:', msg);
+
+      // Get current date and time
+      var now = new Date();
+      var dateTime = now.toLocaleString('en-IN', {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+        timeZone: 'Asia/Kolkata'
+      });
+      console.log('DateTime:', dateTime);
+
+      // Disable button and show loading state
+      console.log('Disabling button...');
+      cbSubmitBtn.textContent = 'Sending...';
+      cbSubmitBtn.disabled = true;
+      console.log('Button disabled, current text:', cbSubmitBtn.textContent);
+
+      // Send data via Google Apps Script
+      var scriptURL = 'https://script.google.com/macros/s/AKfycbzcf7su6gWChej5QH3yuTAo0E3lm7EUgQGQGiZ5pDPRrzHFTszS_ekdMsHUErREYqcQeA/exec';
+      console.log('Script URL:', scriptURL);
+      
+      var payload = {
+        name: name,
+        number: phone,
+        time: dateTime,
+        prop_type: type,
+        message: msg || '(No message provided)'
+      };
+      console.log('Payload to send:', payload);
+      
+      console.log('Starting fetch request...');
+      fetch(scriptURL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      })
+      .then(function(response) {
+        console.log('Fetch response received:', response);
+        // Success (no-cors mode means we can't read response, but we assume success)
+        console.log('Updating UI to show success...');
+        cbSubmitBtn.textContent = 'Request sent';
+        cbSuccess.classList.remove('show');
+        void cbSuccess.offsetWidth; // restart animation if shown again
+        cbSuccess.classList.add('show');
+        form.reset();
+        console.log('Form reset');
+        
+        // Re-enable button after 3 seconds
+        setTimeout(function(){
+          console.log('Re-enabling button...');
+          cbSubmitBtn.textContent = "We'd love to connect";
+          cbSubmitBtn.disabled = false;
+          console.log('Button re-enabled');
+        }, 3000);
+      })
+      .catch(function(error) {
+        // Error
+        console.error('Google Apps Script error:', error);
+        console.log('Updating UI to show error...');
+        cbSubmitBtn.textContent = 'Failed - try again';
         cbSubmitBtn.disabled = false;
-      }, 3000);
-    })
-    .catch(function(error) {
-      // Error
-      console.error('EmailJS error:', error);
-      cbSubmitBtn.textContent = 'Failed - try again';
-      cbSubmitBtn.disabled = false;
-      alert('Sorry, there was an error sending your request. Please try again or call us directly.');
+        alert('Sorry, there was an error sending your request. Please try again or call us directly.');
+      });
     });
-  });
+    console.log('Form submit event listener attached successfully');
+  } else {
+    console.error('Form element not found!');
+  }
 })();
 </script>
 
