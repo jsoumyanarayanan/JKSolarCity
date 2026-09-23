@@ -79,10 +79,11 @@
     opacity:1;
   }
   .scroll-progress-bar::after{
-    content:"☀️";
-    position:absolute; right:-22px; top:-10px;
+    content:var(--scroll-emoji, "🌤️");
+    position:absolute; right:-22px; top:-5px;
     font-size:22px;
     animation:sunBounce 2s ease-in-out infinite;
+    transition:content 0.3s ease;
   }
   @keyframes sunBounce{
     0%,100%{transform:translateY(0) scale(1);}
@@ -1421,6 +1422,7 @@
             </tbody>
           </table>
           <p class="potential-note">Final capacity depends on roof orientation, shade, equipment and how the building is used.</p>
+          <p class="potential-note">Illustrative estimate based on the ranges above, a 92% reduction on your EB bill, ~1,400 kWh/kW/year of Chennai sunshine, ~100 sq ft of roof per kW, and standard grid emission factors. Actual system size, cost, savings and subsidy eligibility are confirmed after a free on-site assessment.</p>
         </div>
 
         <div class="calc">
@@ -1430,9 +1432,9 @@
           <div class="field-group">
             <label>Property type</label>
             <div class="seg" id="propSeg">
-              <button type="button" data-type="home" class="active">Home</button>
-              <button type="button" data-type="apartment">Apartment</button>
-              <button type="button" data-type="business">Business</button>
+              <button type="button" data-type="home" class="active">🏠 Home</button>
+              <button type="button" data-type="apartment">🏢 Apartment</button>
+              <button type="button" data-type="business">💼 Business</button>
             </div>
           </div>
 
@@ -1464,11 +1466,8 @@
             <div class="calc-result-row"><span class="lbl">Estimated monthly savings</span><span class="val gold" id="resSavings">₹2,760/mo</span></div>
             <div class="calc-result-row"><span class="lbl">Estimated yearly savings</span><span class="val gold" id="resYearly">₹33,120/yr</span></div>
             <div class="calc-result-row"><span class="lbl">Government subsidy</span><span class="val gold" id="resSubsidy">Up to ₹1,00,000</span></div>
-            <div class="calc-result-row"><span class="lbl">CO₂ avoided every year</span><span class="val" id="resCO2">~4.0 tonnes</span></div>
-            <div class="calc-result-row"><span class="lbl">Roughly like planting</span><span class="val gold" id="resTrees">201 trees</span></div>
             <div class="calc-result-row" id="resRoofRow" style="display:none;"><span class="lbl">Roof-space check</span><span class="val" id="resRoof">fits comfortably</span></div>
           </div>
-          <div class="calc-disclaimer">Illustrative estimate based on the ranges above, a 92% reduction on your EB bill, ~1,400 kWh/kW/year of Chennai sunshine, ~100 sq ft of roof per kW, and standard grid emission factors. Actual system size, cost, savings and subsidy eligibility are confirmed after a free on-site assessment.</div>
           <a href="#contact" class="btn btn-gold calc-cta">Get my exact number - book assessment</a>
         </div>
       </div>
@@ -1786,6 +1785,13 @@
     var docHeight = document.documentElement.scrollHeight - window.innerHeight;
     var scrolled = docHeight > 0 ? (window.scrollY / docHeight) : 0;
     if(scrollProgressBarEl) scrollProgressBarEl.style.width = (Math.min(1, Math.max(0, scrolled)) * 100) + '%';
+    
+    // update scroll emoji based on percentage
+    var scrollPercent = Math.min(1, Math.max(0, scrolled)) * 100;
+    var emojiIndex = Math.floor(scrollPercent / 20);
+    var emojis = ['🌤️', '🏢', '⚡', '💡', '💰'];
+    var currentEmoji = emojis[Math.min(emojiIndex, emojis.length - 1)];
+    if(scrollProgressBarEl) scrollProgressBarEl.style.setProperty('--scroll-emoji', '"' + currentEmoji + '"');
     
     if(!reduceMotion){
       parallaxLayers.forEach(function(layer){
