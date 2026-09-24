@@ -2075,7 +2075,7 @@
     var scrollPercent = Math.min(1, Math.max(0, scrolled)) * 100;
     var emojiIndex = Math.floor(scrollPercent / 20);
     var emojis = ['🌤️', '🏢', '⚡', '💡', '💰'];
-    var hints = ['Solar', 'Building', 'Panel', 'Power', 'Savings'];
+    var hints = ['Sunlight', 'Property', 'Tailored', 'Power', 'Income'];
     var currentEmoji = emojis[Math.min(emojiIndex, emojis.length - 1)];
     var currentHint = hints[Math.min(emojiIndex, hints.length - 1)];
     if(scrollProgressBarEl) scrollProgressBarEl.style.setProperty('--scroll-emoji', '"' + currentEmoji + '"');
