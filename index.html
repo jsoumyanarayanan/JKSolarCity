@@ -301,6 +301,23 @@
     animation:sunBounce 2s ease-in-out infinite;
     transition:content 0.3s ease;
   }
+  .scroll-progress-hint{
+    position:fixed; left:0; top:2px;
+    font-size:11px; font-weight:600;
+    color:var(--navy);
+    background:linear-gradient(135deg, var(--gold) 0%, var(--rust) 100%);
+    padding:4px 10px;
+    border-radius:12px;
+    white-space:nowrap;
+    opacity:1;
+    transition:opacity 0.3s ease, content 0.3s ease, left 0.3s ease;
+    pointer-events:none;
+    box-shadow:0 4px 12px rgba(240,169,60,0.3);
+    z-index:302;
+  }
+  .scroll-progress-hint.show{
+    opacity:1;
+  }
   @keyframes sunBounce{
     0%,100%{transform:translateY(0) scale(1);}
     50%{transform:translateY(-3px) scale(1.1);}
@@ -1446,6 +1463,7 @@
 <div class="scroll-progress">
   <div class="scroll-progress-bar" id="scrollProgressBar"></div>
 </div>
+<div class="scroll-progress-hint" id="scrollProgressHint"></div>
 
 <header class="site-nav scrolled">
   <div class="nav-inner">
@@ -2057,8 +2075,20 @@
     var scrollPercent = Math.min(1, Math.max(0, scrolled)) * 100;
     var emojiIndex = Math.floor(scrollPercent / 20);
     var emojis = ['🌤️', '🏢', '⚡', '💡', '💰'];
+    var hints = ['Solar', 'Building', 'Panel', 'Power', 'Savings'];
     var currentEmoji = emojis[Math.min(emojiIndex, emojis.length - 1)];
+    var currentHint = hints[Math.min(emojiIndex, hints.length - 1)];
     if(scrollProgressBarEl) scrollProgressBarEl.style.setProperty('--scroll-emoji', '"' + currentEmoji + '"');
+    
+    // update hint text and position
+    var scrollProgressHint = document.getElementById('scrollProgressHint');
+    if(scrollProgressHint){
+      scrollProgressHint.textContent = currentHint;
+      // Position hint based on progress bar width with reduced offset
+      var barWidth = scrollProgressBarEl.offsetWidth;
+      var hintLeft = barWidth + 19;
+      scrollProgressHint.style.left = hintLeft + 'px';
+    }
     
     if(!reduceMotion){
       parallaxLayers.forEach(function(layer){
